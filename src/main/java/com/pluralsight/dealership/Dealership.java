@@ -22,6 +22,7 @@ public class Dealership {
         inventory.add(vehicle);
     }
 
+    // TODO: fix. it doesn't make sense, why am I using an int here ?
     public void removeVehicle(int vehicle) {
         inventory.removeIf(vehicles -> vehicles.getVin() == vehicle);
     }
@@ -31,63 +32,39 @@ public class Dealership {
     }
 
     public List<Vehicle> getVehiclesByPrice(BigDecimal min, BigDecimal max) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getPrice().compareTo(min) >= 0 && vehicle.getPrice().compareTo(max) <= 0 ) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream().filter(
+                vehicle -> vehicle.getPrice().compareTo(min) >= 0 && vehicle.getPrice().compareTo(max) <= 0).toList();
     }
 
     public List<Vehicle> getVehiclesByMakeModel(String make, String model) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getMake().equalsIgnoreCase(make) && vehicle.getModel().equalsIgnoreCase(model)) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream()
+                .filter(
+                        vehicle -> vehicle.getMake().equalsIgnoreCase(make)
+                                && vehicle.getModel().equalsIgnoreCase(model)
+                )
+                .toList();
     }
 
     public List<Vehicle> getVehiclesByYear(int min, int max) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getYear() >= min && vehicle.getYear() <= max) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream()
+                .filter(vehicle -> vehicle.getYear() >= min && vehicle.getYear() <= max).toList();
     }
 
     public List<Vehicle> getVehiclesByColor(String color) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getColor().equalsIgnoreCase(color)) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream()
+                .filter(vehicle -> vehicle.getColor().equalsIgnoreCase(color)).toList();
     }
 
     public List<Vehicle> getVehiclesByMileage(int min, int max) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getOdometer() >= min && vehicle.getOdometer() <= max) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream()
+                .filter(vehicle -> vehicle.getOdometer() >= min && vehicle.getOdometer() <= max)
+                .toList();
     }
 
     public List<Vehicle> getVehiclesByType(String vehicleType) {
-        List<Vehicle> filtered = new ArrayList<Vehicle>();
-        for (Vehicle vehicle : inventory) {
-            if (vehicle.getVehicleType().equalsIgnoreCase(vehicleType)) {
-                filtered.add(vehicle);
-            }
-        }
-        return filtered;
+        return inventory.stream()
+                .filter(vehicle -> vehicle.getVehicleType().equalsIgnoreCase(vehicleType))
+                .toList();
     }
 
     // Getters & Setters

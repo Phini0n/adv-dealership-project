@@ -14,6 +14,7 @@ public final class DealershipFileManager {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE));
             String line;
 
+            // TODO: Check if this is the first line before starting process.
             // Creating Dealership from first line
             line = bufferedReader.readLine();
             String[] str = line.split("\\|");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public final class DisplayHelper {
 
+    // TODO: fix. Do not need a class to display whole program. Make code as generic as possible, don't make methods that are used once.
     private static boolean firstRun = true;
 
     private DisplayHelper() {}
@@ -26,6 +27,7 @@ public final class DisplayHelper {
                         2) Filter Vehicles
                         3) Add a Vehicle
                         4) Remove a Vehicle
+                        5) Sell/Lease a Vehicle
                         99) Exit
                         Enter:\s"""
         );

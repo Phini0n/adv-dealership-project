@@ -9,6 +9,7 @@ public final class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
     private Dealership dealership;
 
+    // TODO: fix. Put Enum in separate thing.
     private enum Menu {
         MENU_MAIN,
         MENU_FILTER
@@ -26,6 +27,8 @@ public final class UserInterface {
         handleDisplay(Menu.MENU_MAIN);
     }
 
+
+    // TODO: fix. Recursion is not necessary. look up fibonacci recursive. also can just turn the recursion into a method.
     private void handleDisplay(Menu menuType) {
         int choice = -1;
         int exitValue = 0; // Value that exits the selected menu
@@ -52,6 +55,10 @@ public final class UserInterface {
                             break;
                         case 4: // Remove a Vehicle
                             processRemoveVehicleRequest();
+                            // TODO: Implement Sell/Lease Vehicle.
+                            System.out.println("Sell/Lease NYI");
+                            break;
+                        case 5: // Sell/Lease a Vehicle
                             break;
                         case 99: // Exit
                             DisplayHelper.displayGoodbye();
