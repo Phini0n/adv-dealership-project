@@ -3,68 +3,19 @@ package com.pluralsight.dealership;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Dealership {
     private String name;
     private String address;
     private String phone;
-
-    List<Vehicle> inventory = new ArrayList<Vehicle>();
+    private final List<Vehicle> inventory;
 
     public Dealership(String name, String address, String phone) {
         this.name = name;
         this.address = address;
         this.phone = phone;
         inventory = new ArrayList<Vehicle>();
-    }
-
-    public  void addVehicle(Vehicle vehicle) {
-        inventory.add(vehicle);
-    }
-
-    // TODO: fix. it doesn't make sense, why am I using an int here ?
-    public void removeVehicle(int vehicle) {
-        inventory.removeIf(vehicles -> vehicles.getVin() == vehicle);
-    }
-
-    public List<Vehicle> getAllVehicles() {
-        return inventory;
-    }
-
-    public List<Vehicle> getVehiclesByPrice(BigDecimal min, BigDecimal max) {
-        return inventory.stream().filter(
-                vehicle -> vehicle.getPrice().compareTo(min) >= 0 && vehicle.getPrice().compareTo(max) <= 0).toList();
-    }
-
-    public List<Vehicle> getVehiclesByMakeModel(String make, String model) {
-        return inventory.stream()
-                .filter(
-                        vehicle -> vehicle.getMake().equalsIgnoreCase(make)
-                                && vehicle.getModel().equalsIgnoreCase(model)
-                )
-                .toList();
-    }
-
-    public List<Vehicle> getVehiclesByYear(int min, int max) {
-        return inventory.stream()
-                .filter(vehicle -> vehicle.getYear() >= min && vehicle.getYear() <= max).toList();
-    }
-
-    public List<Vehicle> getVehiclesByColor(String color) {
-        return inventory.stream()
-                .filter(vehicle -> vehicle.getColor().equalsIgnoreCase(color)).toList();
-    }
-
-    public List<Vehicle> getVehiclesByMileage(int min, int max) {
-        return inventory.stream()
-                .filter(vehicle -> vehicle.getOdometer() >= min && vehicle.getOdometer() <= max)
-                .toList();
-    }
-
-    public List<Vehicle> getVehiclesByType(String vehicleType) {
-        return inventory.stream()
-                .filter(vehicle -> vehicle.getVehicleType().equalsIgnoreCase(vehicleType))
-                .toList();
     }
 
     // Getters & Setters
@@ -95,5 +46,58 @@ public class Dealership {
     @Override
     public String toString() {
         return name + "|" + address + "|" + phone;
+    }
+
+    // Methods
+    public  void addVehicle(Vehicle vehicle) {
+        inventory.add(vehicle);
+    }
+
+    // TODO: fix. it doesn't make sense, why am I using an int here ?
+    public void removeVehicle(Vehicle vehicle) {
+        inventory.remove(vehicle);
+    }
+
+    public List<Vehicle> getAllVehicles() {
+        return inventory;
+    }
+
+    // Uses varargs to filter w/ Predicates
+    public List<Vehicle> filterVehicles(Predicate<Vehicle>... args) {
+        Predicate<Vehicle> combinedPredicate = vehicle -> true; // All Vehicles
+        for (Predicate<Vehicle> arg : args) {
+            combinedPredicate = combinedPredicate.and(arg);
+        }
+
+        return inventory.stream()
+                .filter(combinedPredicate)
+                .toList();
+    }
+
+    // Filtering Predicates
+    public static Predicate<Vehicle> byVehiclePrice(BigDecimal min, BigDecimal max) {
+        return vehicle -> vehicle.getPrice().compareTo(min) >= 0
+                        && vehicle.getPrice().compareTo(max) <= 0;
+    }
+
+    public static Predicate<Vehicle> byVehicleMakeModel (String make, String model) {
+        return vehicle -> vehicle.getMake().equalsIgnoreCase(make)
+                && vehicle.getModel().equalsIgnoreCase(model);
+    }
+
+    public static Predicate<Vehicle> byVehicleYear(int min, int max) {
+        return vehicle -> vehicle.getYear() >= min && vehicle.getYear() <= max;
+    }
+
+    public static Predicate<Vehicle> byVehicleColor(String color) {
+        return vehicle -> vehicle.getColor().equalsIgnoreCase(color);
+    }
+
+    public static Predicate<Vehicle> byVehicleMileage(int min, int max) {
+        return vehicle -> vehicle.getOdometer() >= min && vehicle.getOdometer() <= max;
+    }
+
+    public static Predicate<Vehicle> byVehicleType(String vehicleType) {
+        return vehicle -> vehicle.getVehicleType().equalsIgnoreCase(vehicleType);
     }
 }
