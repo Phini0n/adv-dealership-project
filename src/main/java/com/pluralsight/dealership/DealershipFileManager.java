@@ -44,7 +44,8 @@ public final class DealershipFileManager {
             bufferedReader.close();
             return dealership;
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
         }
         return null;
     }
@@ -61,7 +62,8 @@ public final class DealershipFileManager {
             bufferedWriter.flush();
             bufferedWriter.close();
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
         }
     }
 

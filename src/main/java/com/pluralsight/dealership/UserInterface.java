@@ -3,11 +3,13 @@ package com.pluralsight.dealership;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public final class UserInterface {
     private static final Scanner scanner = new Scanner(System.in);
     private Dealership dealership;
+    private static boolean firstRun = true;
 
     // TODO: fix. Put Enum in separate thing.
     private enum Menu {
@@ -39,7 +41,27 @@ public final class UserInterface {
             // Main Menu Switch Case
             while (choice != exitValue) {
                 try {
-                    DisplayHelper.displayMainMenu(dealership);
+                    if (firstRun) {
+                        System.out.println("Loaded dealership info from: " + DealershipFileManager.getFileLocation());
+                        System.out.println();
+
+                        System.out.println("Welcome to " + dealership.getName() + " at " + dealership.getAddress() +"!");
+                        System.out.println("If you have any questions call at the number: " + dealership.getPhone());
+
+                        firstRun = false;
+                    }
+                    System.out.print(
+                            """
+                                    
+                                    Main Menu
+                                    1) Show All Vehicles
+                                    2) Filter Vehicles
+                                    3) Add a Vehicle
+                                    4) Remove a Vehicle
+                                    5) Sell/Lease a Vehicle
+                                    99) Exit
+                                    Enter:\s"""
+                    );
                     choice = scanner.nextInt();
                     scanner.nextLine();
                     // Passing to requests
@@ -54,7 +76,7 @@ public final class UserInterface {
                             processAddVehicleRequest();
                             break;
                         case 4: // Remove a Vehicle
-                            processRemoveVehicleRequest();
+//                            processRemoveVehicleRequest();
                             // TODO: Implement Sell/Lease Vehicle.
                             System.out.println("Sell/Lease NYI");
                             break;
@@ -70,7 +92,8 @@ public final class UserInterface {
                             break;
                     }
                 } catch (Exception e) {
-                    DisplayHelper.displayError(e);
+                    System.out.println("Error: " + e);
+                    System.out.println("Returning to Main Menu");
                     scanner.nextLine();
                 }
             }
@@ -110,7 +133,8 @@ public final class UserInterface {
                             break;
                     }
                 } catch (Exception e) {
-                    DisplayHelper.displayError(e);
+                    System.out.println("Error: " + e);
+                    System.out.println("Returning to Main Menu");
                     scanner.nextLine();
                 }
             }
@@ -118,65 +142,95 @@ public final class UserInterface {
     }
 
     private void processGetByPriceRequest() {
-        DisplayHelper.displayFilterRequest(1); // Displays filter request for price range.
-        String[] priceRange = scanner.nextLine().split("-");
+        System.out.print("Please enter your minimum price, followed by a hyphen, then " +
+                "your maximum price (EX. \"200.00-3000.00\"): ");
+        String[] priceRange = scanner.nextLine().trim().split("-");
         try {
-            DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByPrice(
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehiclePrice(
                     new BigDecimal(priceRange[0]),
-                    new BigDecimal(priceRange[1])));
+                    new BigDecimal(priceRange[1])
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
-            scanner.nextLine();
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+//            scanner.nextLine();
         }
     }
 
     private void processGetByMakeModelRequest() {
-        DisplayHelper.displayFilterRequest(2);
+        System.out.print("Please enter your make followed by your model (EX. Toyota Camry): ");
         try {
-            String[] makeModel = scanner.nextLine().split(" ");
-            DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByMakeModel(
+            String[] makeModel = scanner.nextLine().trim().split(" ");
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehicleMakeModel(
                     makeModel[0],
-                    makeModel[1]));
+                    makeModel[1]
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
-            scanner.nextLine();
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+//            scanner.nextLine();
         }
     }
 
     private void processGetByYearRequest() {
-        DisplayHelper.displayFilterRequest(3);
+        System.out.print("Please enter the span of years you want to filter by using a hyphen (EX. \"2001-2020\"): ");
         try {
-            String[] yearRange = scanner.nextLine().split("-");
-            DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByYear(
+            String[] yearRange = scanner.nextLine().trim().split("-");
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehicleYear(
                     Integer.parseInt(yearRange[0]),
-                    Integer.parseInt(yearRange[1])));
+                    Integer.parseInt(yearRange[1])
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
-            scanner.nextLine();
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+//            scanner.nextLine();
         }
     }
 
     private void processGetByColorRequest() {
-        DisplayHelper.displayFilterRequest(4); // Displays filter request for color.
-        DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByColor(scanner.nextLine()));
+        System.out.print("Please enter the color you want to filter by: ");
+        try {
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehicleColor(
+                    scanner.nextLine()
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+        }
     }
 
     private void processGetByMileageRequest() {
-        DisplayHelper.displayFilterRequest(5);
+        System.out.print("Please enter the span of mileage you want to filter by (EX. \"8000-12000\"): ");
         try {
             String[] odometerRange = scanner.nextLine().split("-");
-            DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByMileage(
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehicleMileage(
                     Integer.parseInt(odometerRange[0]),
-                    Integer.parseInt(odometerRange[1])));
+                    Integer.parseInt(odometerRange[1])
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
-            scanner.nextLine();
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+//            scanner.nextLine();
         }
     }
 
     private void processGetByVehicleTypeRequest() {
-        DisplayHelper.displayFilterRequest(6);
-        DisplayHelper.displayVehicles((ArrayList<Vehicle>) dealership.getVehiclesByType(scanner.nextLine()));
+        System.out.print("Please enter the vehicle type (EX. sedan, SUV, etc.): ");
+        try {
+            List<Vehicle> filteredVehicles = dealership.filterVehicles(Dealership.byVehicleType(
+                    scanner.nextLine()
+            ));
+            DisplayHelper.displayVehicles(new ArrayList<>(filteredVehicles));
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+//            scanner.nextLine();
+        }
     }
 
     private void processGetAllVehicleRequest() {
@@ -219,21 +273,22 @@ public final class UserInterface {
 
             DisplayHelper.vehicleConfirmation(false, newVehicle);
         } catch (Exception e) {
-            DisplayHelper.displayError(e);
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
         }
         DealershipFileManager.saveDealership(dealership);
     }
 
-    private void processRemoveVehicleRequest(){
-        try {
-            DisplayHelper.displayAddRemoveVehicle(-1);
-            int vin = scanner.nextInt();
-            dealership.removeVehicle(vin);
-            DealershipFileManager.saveDealership(dealership);
-
-            DisplayHelper.vehicleConfirmation(true, vin);
-        } catch (Exception e) {
-            DisplayHelper.displayError(e);
-        }
-    }
+//    private void processRemoveVehicleRequest(){
+//        try {
+//            DisplayHelper.displayAddRemoveVehicle(-1);
+//            int vin = scanner.nextInt();
+//            dealership.removeVehicle(dealership);
+//            DealershipFileManager.saveDealership(dealership);
+//
+//            DisplayHelper.vehicleConfirmation(true, vin);
+//        } catch (Exception e) {
+//            DisplayHelper.displayError(e);
+//        }
+//    }
 }

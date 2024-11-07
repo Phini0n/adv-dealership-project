@@ -63,13 +63,14 @@ public class Dealership {
     }
 
     // Uses varargs to filter w/ Predicates
-    public List<Vehicle> filterVehicles(Predicate<Vehicle>... args) {
+    @SafeVarargs
+    public final List<Vehicle> filterVehicles(Predicate<Vehicle>... args) {
         Predicate<Vehicle> combinedPredicate = vehicle -> true; // All Vehicles
         for (Predicate<Vehicle> arg : args) {
-            combinedPredicate = combinedPredicate.and(arg);
+            combinedPredicate = combinedPredicate.and(arg); // Adds each filter per arg
         }
 
-        return inventory.stream()
+        return inventory.stream() // Returns list filtered by combinedPredicate
                 .filter(combinedPredicate)
                 .toList();
     }
