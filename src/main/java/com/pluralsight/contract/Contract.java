@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 // TODO: fix actions after getter & setter
 public abstract class Contract {
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
     private String date;
     private String name;
     private String email;
@@ -58,5 +59,9 @@ public abstract class Contract {
 
     public void setVehicleSold(Vehicle vehicleSold) {
         this.vehicleSold = vehicleSold;
+    }
+
+    protected static BigDecimal percentage(BigDecimal base, BigDecimal pct){
+        return base.multiply(pct).divide(ONE_HUNDRED);
     }
 }

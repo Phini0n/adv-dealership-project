@@ -5,7 +5,6 @@ import com.pluralsight.dealership.Vehicle;
 import java.math.BigDecimal;
 
 public class SalesContract extends Contract {
-    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
     private final BigDecimal SALES_TAX_AMOUNT = new BigDecimal(5);
     private final BigDecimal RECORDING_FEE = new BigDecimal(100);
     private final BigDecimal processingFee;
@@ -45,9 +44,5 @@ public class SalesContract extends Contract {
         } else {
             return BigDecimal.ZERO;
         }
-    }
-
-    public static BigDecimal percentage(BigDecimal base, BigDecimal pct){
-        return base.multiply(pct).divide(ONE_HUNDRED);
     }
 }
