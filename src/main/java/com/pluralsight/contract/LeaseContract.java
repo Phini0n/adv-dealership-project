@@ -10,16 +10,17 @@ public class LeaseContract extends Contract {
 
     public LeaseContract(String date, String name, String email, Vehicle vehicleSold, boolean wantsToFinance) {
         super(date, name, email, vehicleSold);
-
+        this.expectedEndingValue = percentage(this.getVehicleSold().getPrice(), new BigDecimal(50));
+        this.leaseFee = percentage(this.getVehicleSold().getPrice(), new BigDecimal(7));
     }
 
     @Override
     public BigDecimal getTotalPrice() {
-        return null;
+        return this.getVehicleSold().getPrice().add(expectedEndingValue).add(leaseFee).add(getMonthlyPayment());
     }
 
     @Override
     public BigDecimal getMonthlyPayment() {
-        return null;
+        return percentage(this.getVehicleSold().getPrice(), new BigDecimal(5));
     }
 }
