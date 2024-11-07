@@ -45,4 +45,16 @@ public class SalesContract extends Contract {
             return BigDecimal.ZERO;
         }
     }
+
+    @Override
+    public String toString() {
+        return "SALE" + "|" + this.getDate() + "|" + this.getName()
+                + "|" + this.getEmail() + "|" + this.getVehicleSold().getVin()
+                + "|" + getVehicleSold().getYear() + "|" +
+                getVehicleSold().getMake() + "|" + getVehicleSold().getModel()
+                + "|" + getVehicleSold().getVehicleType() + "|"
+                + getVehicleSold().getColor() + "|" + getVehicleSold().getOdometer()
+                + "|" + getTotalPrice();
+
+    }
 }

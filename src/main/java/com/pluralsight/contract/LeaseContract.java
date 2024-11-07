@@ -23,4 +23,16 @@ public class LeaseContract extends Contract {
     public BigDecimal getMonthlyPayment() {
         return percentage(this.getVehicleSold().getPrice(), new BigDecimal(5));
     }
+
+    @Override
+    public String toString() {
+        return this.getDate() + "|" + this.getName()
+                + "|" + this.getEmail() + "|" + this.getVehicleSold().getVin()
+                + "|" + getVehicleSold().getYear() + "|" +
+                getVehicleSold().getMake() + "|" + getVehicleSold().getModel()
+                + "|" + getVehicleSold().getVehicleType() + "|"
+                + getVehicleSold().getColor() + "|" + getVehicleSold().getOdometer()
+                + "|" + getTotalPrice();
+
+    }
 }

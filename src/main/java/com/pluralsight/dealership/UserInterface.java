@@ -12,10 +12,7 @@ public final class UserInterface {
     private static boolean firstRun = true;
 
     // TODO: fix. Put Enum in separate thing.
-    private enum Menu {
-        MENU_MAIN,
-        MENU_FILTER
-    }
+
 
     private void init() {
         dealership = DealershipFileManager.getDealership();
