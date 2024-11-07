@@ -16,27 +16,34 @@ public class SalesContract extends Contract {
         this.processingFee = this.getVehicleSold().getPrice() // If greater than/equal to 10,000 = 495, else 295
                 .compareTo(new BigDecimal(10000)) >= 0 ? new BigDecimal(495) : new BigDecimal(295);
         this.wantsToFinance = wantsToFinance;
-        this.getTotalPrice();
     }
 
     @Override
     public BigDecimal getTotalPrice() {
-        BigDecimal finalPrice;
-
-        finalPrice = this.getVehicleSold()
+        BigDecimal finalPrice = this.getVehicleSold()
                 .getPrice()
-                .add(this.RECORDING_FEE).add(this.processingFee)
-                .add(this.getMonthlyPayment());
+                .add(this.RECORDING_FEE)
+                .add(this.processingFee);
+
         finalPrice = finalPrice.add(percentage(finalPrice, SALES_TAX_AMOUNT));
+
+        if (wantsToFinance) {
+            finalPrice = finalPrice.add(percentage(finalPrice, getMonthlyPayment()));
+        }
+
         return finalPrice;
     }
 
     @Override
     public BigDecimal getMonthlyPayment() {
-        if (wantsToFinance) {
-            
+        if (this.wantsToFinance) {
+            if (processingFee.compareTo(new BigDecimal(495)) == 0) {
+                return new BigDecimal("4.25");
+            } else {
+                return new BigDecimal("5.25");
+            }
         } else {
-            return null;
+            return BigDecimal.ZERO;
         }
     }
 
