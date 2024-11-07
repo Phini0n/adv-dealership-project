@@ -73,11 +73,12 @@ public final class UserInterface {
                             processAddVehicleRequest();
                             break;
                         case 4: // Remove a Vehicle
-//                            processRemoveVehicleRequest();
+                            processRemoveVehicleRequest();
                             // TODO: Implement Sell/Lease Vehicle.
                             System.out.println("Sell/Lease NYI");
                             break;
                         case 5: // Sell/Lease a Vehicle
+
                             break;
                         case 99: // Exit
                             DisplayHelper.displayGoodbye();
@@ -277,16 +278,17 @@ public final class UserInterface {
         DealershipFileManager.saveDealership(dealership);
     }
 
-//    private void processRemoveVehicleRequest(){
-//        try {
-//            DisplayHelper.displayAddRemoveVehicle(-1);
-//            int vin = scanner.nextInt();
-//            dealership.removeVehicle(dealership);
-//            DealershipFileManager.saveDealership(dealership);
-//
-//            DisplayHelper.vehicleConfirmation(true, vin);
-//        } catch (Exception e) {
-//            DisplayHelper.displayError(e);
-//        }
-//    }
+    private void processRemoveVehicleRequest(){
+        try {
+            DisplayHelper.displayAddRemoveVehicle(-1);
+            int vin = scanner.nextInt();
+            List<Vehicle> vehicles = dealership.getAllVehicles();
+            vehicles.removeIf(vehicle -> vehicle.getVin() == vin);
+            DealershipFileManager.saveDealership(dealership);
+            DisplayHelper.vehicleConfirmation(true, vin);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            System.out.println("Returning to Main Menu");
+        }
+    }
 }
